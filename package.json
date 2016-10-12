@@ -1,6 +1,6 @@
 {
-  "name": "router",
-  "description": "Router for ash framework",
+  "name": "@ash-framework/router",
+  "description": "Router for the ash web framework",
   "version": "0.0.0",
   "license": "MIT",
   "main": "./dist/index.js",
@@ -40,7 +40,10 @@
     "framework",
     "router"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "ember-route-objects": "^1.0.0",
+    "express-object-defined-routes": "^1.0.0"
+  },
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "babel-eslint": "^7.0.0",

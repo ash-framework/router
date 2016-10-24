@@ -39,7 +39,7 @@ Router for ash framework
 
 
 ## Usage
-Usage instructions go here
+
 
 <!-- HISTORY/ -->
 

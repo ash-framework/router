@@ -4,7 +4,7 @@ const path = require('path')
 const express = require('express')
 const request = require('supertest-as-promised')
 const bodyparser = require('body-parser')
-const router = require('../src')
+const router = require('../../src')
 let app
 
 describe('Router', function () {

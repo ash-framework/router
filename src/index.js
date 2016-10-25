@@ -23,26 +23,35 @@ function createCallback (route) {
   }
 }
 
+function loadFile (name, directory) {
+  const filePath = path.join(directory, name)
+  try {
+    return require(filePath)
+  } catch (err) {
+    if (name !== 'index') {
+      throw new FileNotFoundError(name, directory)
+    }
+  }
+}
+
+function instantiateRouteClass (Route) {
+  if (!Route) return null
+  const route = new Route()
+  if (!route.model) {
+    throw new Error(`"Model hook" for route "${Route.constructor.name}" was not found, but is required`)
+  }
+  return route
+}
+
 function addRouteCallbacks (routeObjects, routesDir) {
   return routeObjects.map(routeObj => {
     if (routeObj.children.length > 0) {
       routeObj.children = addRouteCallbacks(routeObj.children, path.join(routesDir, routeObj.name))
     } else {
-      let Route
-      const routeFilePath = path.join(routesDir, routeObj.name)
-      try {
-        Route = require(routeFilePath)
-        const route = new Route()
-        if (!route.model) {
-          throw new Error(`"Model hook" for route "${routeFilePath}" was not found, but is required`)
-        }
-        routeObj.callback = createCallback(route)
-      } catch (err) {
-        if (routeObj.name !== 'index') {
-          throw new FileNotFoundError(`${routeObj.name}.js`, routesDir)
-        }
-        return
-      }
+      const Route = loadFile(routeObj.name, routesDir)
+      const route = instantiateRouteClass(Route)
+      if (!route) return
+      routeObj.callback = createCallback(route)
     }
     return routeObj
   })

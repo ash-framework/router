@@ -83,8 +83,8 @@
       [
         "badge",
         {
-          "image": "https://nodei.co/npm/router.png?downloads=true&stars=true",
-          "url": "https://nodei.co/npm/router"
+          "image": "https://nodei.co/npm/@ash-framework/router.png?downloads=true&stars=true",
+          "url": "https://nodei.co/npm/@ash-framework/router"
         }
       ],
       "---",

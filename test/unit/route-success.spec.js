@@ -3,7 +3,7 @@
 const td = require('testdouble')
 const routeSuccess = require('../../src/route-success')
 
-describe('Router', function () {
+describe('route-success', function () {
   afterEach(() => {
     td.reset()
   })

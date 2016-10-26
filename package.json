@@ -14,7 +14,7 @@
   "homepage": "https://github.com/ash-framework/router",
   "author": "Richard Walker <digitalsadhu@gmail.com> (http://lovebeer.nz/)",
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=6.7.0"
   },
   "scripts": {
     "lint": "standard --verbose | snazzy",

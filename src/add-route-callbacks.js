@@ -1,6 +1,5 @@
 const createCallback = require('./create-callback')
 const loadFile = require('./load-file')
-const instantiateRouteClass = require('./instantiate-route-class')
 const path = require('path')
 
 function addRouteCallbacks (routeObjects, routesDir) {
@@ -9,9 +8,8 @@ function addRouteCallbacks (routeObjects, routesDir) {
       routeObj.children = addRouteCallbacks(routeObj.children, path.join(routesDir, routeObj.name))
     } else {
       const Route = loadFile(routeObj.name, routesDir)
-      const route = instantiateRouteClass(Route)
-      if (!route) return
-      routeObj.callback = createCallback(route)
+      if (!Route) return
+      routeObj.callback = createCallback(Route)
     }
     return routeObj
   })

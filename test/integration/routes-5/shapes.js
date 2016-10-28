@@ -1,10 +1,12 @@
 'use strict'
 
-module.exports = class Route {
-  deserialize (params, query, body, httpContext) {
-    body.sides = 3
+const Ash = require('@ash-framework/classes')
+
+module.exports = class Route extends Ash.Route {
+  deserialize () {
+    this.body.sides = 3
   }
-  model (params, query, body) {
-    return body
+  model () {
+    return this.body
   }
 }

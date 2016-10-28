@@ -3,10 +3,11 @@ const routeChain = require('./route-chain')
 const routeError = require('./route-error')
 const routeSuccess = require('./route-success')
 
-module.exports = function (route) {
+module.exports = function (Route) {
   return function (req, res) {
     const httpContext = new HttpContext(req, res)
-    routeChain(route, httpContext)
+    const route = new Route(httpContext)
+    routeChain(route)
       .then(model => {
         routeSuccess(model, httpContext)
       })

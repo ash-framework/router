@@ -1,6 +1,8 @@
 'use strict'
 
-module.exports = class Route {
-  model (params) {
+const Classes = require('@ash-framework/classes')
+
+module.exports = class Route extends Classes.Route {
+  model () {
   }
 }

@@ -6,80 +6,30 @@ const fileExists = require('./file-exists')
 function addRouteCallbacks (routeObjects, routesDir) {
   const objects = []
   routeObjects.forEach(routeObj => {
-    let Route
-
-    // implicit routes
-
     if (routeObj.children.length > 0) {
-      if (fileExists(`${routeObj.name}/index.js`, routesDir)) {
-        Route = loadFile(`${routeObj.name}/index.js`, routesDir)
+      // implicit routes
+      const allowedMethods = ['get', 'put', 'post', 'patch', 'delete', 'options', 'head']
+      allowedMethods.forEach(method => {
+        let Route
+        if (method.toLowerCase() === 'get') {
+          if (fileExists(`${routeObj.name}/index.js`, routesDir)) {
+            Route = loadFile(`${routeObj.name}/index.js`, routesDir)
+          } else if (fileExists(`${routeObj.name}/index.get.js`, routesDir)) {
+            Route = loadFile(`${routeObj.name}/index.get.js`, routesDir)
+          }
+        }
+        if (!Route && fileExists(`${routeObj.name}/index.${method}.js`, routesDir)) {
+          Route = loadFile(`${routeObj.name}/index.${method}.js`, routesDir)
+        }
         if (Route) {
           objects.push({
-            method: 'get',
+            method: method,
             callback: createCallback(Route),
             name: 'index',
             path: routeObj.path
           })
         }
-      } else if (fileExists(`${routeObj.name}/index.get.js`, routesDir)) {
-        Route = loadFile(`${routeObj.name}/index.get.js`, routesDir)
-        if (Route) {
-          objects.push({
-            method: 'get',
-            callback: createCallback(Route),
-            name: 'index',
-            path: routeObj.path
-          })
-        }
-      }
-
-      if (fileExists(`${routeObj.name}/index.post.js`, routesDir)) {
-        Route = loadFile(`${routeObj.name}/index.post.js`, routesDir)
-        if (Route) {
-          objects.push({
-            method: 'post',
-            callback: createCallback(Route),
-            name: 'index',
-            path: routeObj.path
-          })
-        }
-      }
-
-      if (fileExists(`${routeObj.name}/index.put.js`, routesDir)) {
-        Route = loadFile(`${routeObj.name}/index.put.js`, routesDir)
-        if (Route) {
-          objects.push({
-            method: 'put',
-            callback: createCallback(Route),
-            name: 'index',
-            path: routeObj.path
-          })
-        }
-      }
-
-      if (fileExists(`${routeObj.name}/index.patch.js`, routesDir)) {
-        Route = loadFile(`${routeObj.name}/index.patch.js`, routesDir)
-        if (Route) {
-          objects.push({
-            method: 'patch',
-            callback: createCallback(Route),
-            name: 'index',
-            path: routeObj.path
-          })
-        }
-      }
-
-      if (fileExists(`${routeObj.name}/index.delete.js`, routesDir)) {
-        Route = loadFile(`${routeObj.name}/index.delete.js`, routesDir)
-        if (Route) {
-          objects.push({
-            method: 'delete',
-            callback: createCallback(Route),
-            name: 'index',
-            path: routeObj.path
-          })
-        }
-      }
+      })
 
       // recurse
 

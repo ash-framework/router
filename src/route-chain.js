@@ -20,12 +20,10 @@ module.exports = function (route) {
       return route.serialize(model)
     })
     .catch(err => {
-      if (!route.error) {
-        return Promise.reject(err)
+      let error
+      if (typeof route.error === 'function') {
+        error = route.error(err) || err
       }
-      return route.error(err)
-        .then(err => {
-          return Promise.reject(err)
-        })
+      return Promise.reject(error)
     })
 }

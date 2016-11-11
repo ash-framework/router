@@ -20,7 +20,8 @@ module.exports = function (definition, options) {
   }
 
   // parse ember style route definitions into an object structure
-  const routeObjects = addRouteCallbacks(parseRouteObjects(definition), options.routesDir)
+  let routeObjects = parseRouteObjects(definition)
+  routeObjects = addRouteCallbacks(routeObjects, options.routesDir)
 
   // return an express router that can be mounted using expresses app.use
   return createExpressRouter(routeObjects)

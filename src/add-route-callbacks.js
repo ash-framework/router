@@ -52,10 +52,15 @@ function addRouteCallbacks (routeObjects, routesDir) {
             Route = loadFile(`${routeObj.name}.js`, routesDir)
           } else if (fileExists(`${routeObj.name}.get.js`, routesDir)) {
             Route = loadFile(`${routeObj.name}.get.js`, routesDir)
+          } else if (fileExists(`${routeObj.name}/index.get.js`, routesDir)) {
+            Route = loadFile(`${routeObj.name}/index.get.js`, routesDir)
+          } else if (fileExists(`${routeObj.name}/index.js`, routesDir)) {
+            Route = loadFile(`${routeObj.name}/index.js`, routesDir)
           }
-        }
-        if (!Route && fileExists(`${routeObj.name}.${method}.js`, routesDir)) {
+        } else if (fileExists(`${routeObj.name}.${method}.js`, routesDir)) {
           Route = loadFile(`${routeObj.name}.${method}.js`, routesDir)
+        } else if (fileExists(`${routeObj.name}/index.${method}.js`, routesDir)) {
+          Route = loadFile(`${routeObj.name}/index.${method}.js`, routesDir)
         }
         if (Route) {
           objects.push({

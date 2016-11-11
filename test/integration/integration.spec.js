@@ -169,4 +169,23 @@ describe('Router', function () {
       assert.deepEqual(res[0].body.name, 'users')
     })
   })
+
+  it('index works for empty route with callback', function () {
+    const definition = function () {
+      this.route('users', function () { })
+    }
+
+    const expressRouter = router(definition, {
+      routesDir: path.join(__dirname, 'routes-5')
+    })
+    app.use(expressRouter)
+
+    return Promise.all([
+      request(app).get('/users')
+    ])
+    .then(res => {
+      assert.deepEqual(res[0].body.method, 'get')
+      assert.deepEqual(res[0].body.name, 'index')
+    })
+  })
 })

@@ -148,4 +148,25 @@ describe('Router', function () {
       assert.deepEqual(res[9].body.name, 'widget')
     })
   })
+
+  it('route priority', function () {
+    const definition = function () {
+      this.route('users', function () {
+        this.route('users', {path: '/'})
+      })
+    }
+
+    const expressRouter = router(definition, {
+      routesDir: path.join(__dirname, 'routes-4')
+    })
+    app.use(expressRouter)
+
+    return Promise.all([
+      request(app).get('/users')
+    ])
+    .then(res => {
+      assert.deepEqual(res[0].body.method, 'get')
+      assert.deepEqual(res[0].body.name, 'users')
+    })
+  })
 })

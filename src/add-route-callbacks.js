@@ -3,33 +3,39 @@ const loadFile = require('./load-file')
 const path = require('path')
 const fileExists = require('./file-exists')
 
+const allowedMethods = ['get', 'put', 'post', 'patch', 'delete', 'options', 'head']
+
 function addRouteCallbacks (routeObjects, routesDir) {
   const objects = []
   routeObjects.forEach(routeObj => {
+    if (routeObj.name === 'index') return
+
     if (routeObj.children.length > 0) {
-      // implicit routes
-      const allowedMethods = ['get', 'put', 'post', 'patch', 'delete', 'options', 'head']
-      allowedMethods.forEach(method => {
-        let Route
-        if (method.toLowerCase() === 'get') {
-          if (fileExists(`${routeObj.name}/index.js`, routesDir)) {
-            Route = loadFile(`${routeObj.name}/index.js`, routesDir)
-          } else if (fileExists(`${routeObj.name}/index.get.js`, routesDir)) {
-            Route = loadFile(`${routeObj.name}/index.get.js`, routesDir)
+      const sameNamedChild = routeObj.children.filter(children => children.name === routeObj.name)[0]
+      if (!sameNamedChild || (sameNamedChild && sameNamedChild.path !== '/')) {
+        // implicit routes
+        allowedMethods.forEach(method => {
+          let Route
+          if (method.toLowerCase() === 'get') {
+            if (fileExists(`${routeObj.name}/index.js`, routesDir)) {
+              Route = loadFile(`${routeObj.name}/index.js`, routesDir)
+            } else if (fileExists(`${routeObj.name}/index.get.js`, routesDir)) {
+              Route = loadFile(`${routeObj.name}/index.get.js`, routesDir)
+            }
           }
-        }
-        if (!Route && fileExists(`${routeObj.name}/index.${method}.js`, routesDir)) {
-          Route = loadFile(`${routeObj.name}/index.${method}.js`, routesDir)
-        }
-        if (Route) {
-          objects.push({
-            method: method,
-            callback: createCallback(Route),
-            name: 'index',
-            path: routeObj.path
-          })
-        }
-      })
+          if (!Route && fileExists(`${routeObj.name}/index.${method}.js`, routesDir)) {
+            Route = loadFile(`${routeObj.name}/index.${method}.js`, routesDir)
+          }
+          if (Route) {
+            objects.push({
+              method: method,
+              callback: createCallback(Route),
+              name: 'index',
+              path: routeObj.path
+            })
+          }
+        })
+      }
 
       // recurse
 
@@ -39,7 +45,6 @@ function addRouteCallbacks (routeObjects, routesDir) {
       })
     } else {
       // explicit routes
-      const allowedMethods = ['get', 'put', 'post', 'patch', 'delete', 'options', 'head']
       allowedMethods.forEach(method => {
         let Route
         if (method.toLowerCase() === 'get') {

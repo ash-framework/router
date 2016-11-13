@@ -4,12 +4,12 @@ const routeSuccess = require('./route-success')
 
 module.exports = function (Route, routeName) {
   return function (req, res, next) {
+    res.statusCode = null
     const httpContext = new HttpContext(req, res)
     const route = new Route(httpContext)
     route.routeName = routeName
     routeChain(route)
       .then(model => {
-        const response = httpContext.response
         let status = 200
         if (!model) {
           status = 204
@@ -17,10 +17,10 @@ module.exports = function (Route, routeName) {
         if (route.method === 'post') {
           status = 201
         }
-        if (response.statusCode) {
-          status = response.statusCode
+        if (res.statusCode) {
+          status = res.statusCode
         }
-        routeSuccess(model, status, response)
+        routeSuccess(model, status, res)
       })
       .catch(next)
   }

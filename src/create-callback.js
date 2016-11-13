@@ -9,7 +9,7 @@ module.exports = function (Route) {
     routeChain(route)
       .then(model => {
         const response = httpContext.response
-        const status = route.status || response.status || 200
+        const status = route.status || response.statusCode || 200
         routeSuccess(model, status, response)
       })
       .catch(next)

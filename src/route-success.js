@@ -2,12 +2,16 @@ const isReadableStream = require('./is-stream')
 
 module.exports = function (model, status, response) {
   if (isReadableStream(model)) {
-    model.status(status).pipe(response)
+    response.status(status)
+    model.pipe(response)
   } else if (typeof model === 'object') {
-    return response.status(status).json(model)
+    response.status(status)
+    return response.json(model)
   } else if (!model) {
-    response.status(status).send(String())
+    response.status(status)
+    return response.send(String())
   } else {
-    response.status(status).send(String(model))
+    response.status(status)
+    return response.send(String(model))
   }
 }

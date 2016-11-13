@@ -29,7 +29,7 @@ function addRouteCallbacks (routeObjects, routesDir) {
           if (Route) {
             objects.push({
               method: method,
-              callback: createCallback(Route),
+              callback: createCallback(Route, routeObj.name),
               name: 'index',
               path: routeObj.path
             })

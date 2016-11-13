@@ -2,14 +2,24 @@ const HttpContext = require('@ash-framework/http-context')
 const routeChain = require('./route-chain')
 const routeSuccess = require('./route-success')
 
-module.exports = function (Route) {
+module.exports = function (Route, routeName) {
   return function (req, res, next) {
     const httpContext = new HttpContext(req, res)
     const route = new Route(httpContext)
+    route.routeName = routeName
     routeChain(route)
       .then(model => {
         const response = httpContext.response
-        const status = route.status || response.statusCode || 200
+        let status = 200
+        if (!model) {
+          status = 204
+        }
+        if (route.method === 'post') {
+          status = 201
+        }
+        if (response.statusCode) {
+          status = response.statusCode
+        }
         routeSuccess(model, status, response)
       })
       .catch(next)

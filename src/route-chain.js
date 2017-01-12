@@ -33,7 +33,6 @@ module.exports = function (route) {
       return route.model()
     })
     .then(model => {
-      route.currentModel = model
       const promises = [model]
       if (route.afterModel) {
         promises.push(route.afterModel(model))

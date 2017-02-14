@@ -33,21 +33,10 @@ module.exports = function (route) {
       return route.model()
     })
     .then(model => {
-      const promises = [model]
-      if (route.afterModel) {
-        promises.push(route.afterModel(model))
-      }
-      return Promise.all(promises)
+      return (route.afterModel) ? route.afterModel(model) : model
     })
     .then(model => {
-      const promises = [model[0]]
-      if (route.serialize) {
-        promises.push(route.serialize(model[0]))
-      }
-      return Promise.all(promises)
-    })
-    .then(model => {
-      return model[0]
+      return (route.serialize) ? route.serialize(model) : model
     })
     .catch(err => {
       let error = err

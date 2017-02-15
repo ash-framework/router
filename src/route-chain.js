@@ -5,7 +5,8 @@ module.exports = function (route) {
   function applyMiddleware (middlewareList) {
     if (middlewareList.length < 1) return
     const middlewareName = middlewareList.shift()
-    const Middleware = require(path.join(process.cwd(), 'app', 'middleware') + '/' + middlewareName)
+    const Module = require(path.join(process.cwd(), 'app', 'middleware') + '/' + middlewareName)
+    const Middleware = (Module.__esModule) ? Module.default : Module
     const {request, response} = route
     const middleware = new Middleware(new HttpContext(request, response))
     return Promise.resolve()

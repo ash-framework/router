@@ -41,7 +41,6 @@
   ],
   "dependencies": {
     "@ash-framework/argument-error": "^1.0.3",
-    "@ash-framework/classes": "^0.0.2",
     "@ash-framework/file-not-found-error": "^1.0.0",
     "@ash-framework/http-context": "^1.0.0",
     "ember-route-objects": "^1.0.0",
